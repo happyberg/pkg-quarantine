@@ -1,6 +1,6 @@
 {
   "name": "pkg-quarantine",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Unified quarantine policy for package managers — block recently-published packages to prevent supply-chain attacks",
   "type": "module",
   "bin": {
@@ -41,7 +41,18 @@
     "brew",
     "package-manager"
   ],
-  "author": "David Gil <dgilperez@gmail.com>",
+  "author": {
+    "name": "Happyberg Labs",
+    "email": "hola@happyberg.com",
+    "url": "https://happyberg.com"
+  },
+  "contributors": [
+    {
+      "name": "David Gil Pérez",
+      "email": "dgilperez@gmail.com",
+      "url": "https://dgilperez.com"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

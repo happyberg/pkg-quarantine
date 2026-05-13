@@ -6,6 +6,22 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.1.6] — 2026-05-14
+
+### Changed
+
+- **Package author rebranded to Happyberg Labs.** The repo moved from
+  `dgilperez/pkg-quarantine` to `happyberg/pkg-quarantine` in 0.1.5,
+  but the `author` field in `package.json` still read "David Gil",
+  which is what npmjs.com displays on the package page. Now reads
+  "Happyberg Labs" with `hola@happyberg.com` / https://happyberg.com.
+  David Gil Pérez is listed in `contributors[]` as the original
+  author and maintainer — the personal credit stays, the company
+  branding lands on the npm page.
+
+No code changes between 0.1.5 and 0.1.6. 0.1.5 was tagged and released
+on GitHub but was not published to npm; npm jumps from 0.1.4 to 0.1.6.
+
 ## [0.1.5] — 2026-05-13
 
 ### Changed
@@ -139,8 +155,9 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.5...HEAD
-[0.1.5]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.4...v0.1.5
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.5...v0.1.6
+[0.1.5]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.1...v0.1.2
