@@ -6,6 +6,31 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-14
+
+### Changed
+
+- **Package moved to the `@happyberg` npm scope.** Now installed as
+  `npm install -g @happyberg/pkg-quarantine` (was: `npm install -g
+  pkg-quarantine`). The CLI binary name is unchanged: still `quarantine`
+  on your PATH. Same code as 0.1.6, just under the org's namespace so
+  the package appears under https://www.npmjs.com/~happyberg.
+- The unscoped `pkg-quarantine` package on npm (versions 0.1.0 through
+  0.1.6) is deprecated with a message pointing to the scoped name.
+
+### Migration
+
+If you have an existing install:
+
+```bash
+npm uninstall -g pkg-quarantine
+npm install -g @happyberg/pkg-quarantine
+```
+
+The `quarantine` CLI remains identical. All `quarantine init`,
+`quarantine audit`, `quarantine update`, and `quarantine status`
+commands work the same way.
+
 ## [0.1.6] — 2026-05-14
 
 ### Changed
@@ -155,7 +180,8 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.3...v0.1.4

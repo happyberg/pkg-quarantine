@@ -2,16 +2,16 @@
 
 > **\[ pkg \] —— wait 4 days ——> \[ install \]**  ← supply-chain blocker
 
-[![npm version](https://img.shields.io/npm/v/pkg-quarantine)](https://www.npmjs.com/package/pkg-quarantine)
-[![license](https://img.shields.io/npm/l/pkg-quarantine)](https://github.com/dgilperez/pkg-quarantine/blob/master/LICENSE)
-[![node](https://img.shields.io/node/v/pkg-quarantine)](https://github.com/dgilperez/pkg-quarantine/blob/master/package.json)
+[![npm version](https://img.shields.io/npm/v/@happyberg/pkg-quarantine)](https://www.npmjs.com/package/@happyberg/pkg-quarantine)
+[![license](https://img.shields.io/npm/l/@happyberg/pkg-quarantine)](https://github.com/happyberg/pkg-quarantine/blob/master/LICENSE)
+[![node](https://img.shields.io/node/v/@happyberg/pkg-quarantine)](https://github.com/happyberg/pkg-quarantine/blob/master/package.json)
 
 **Block freshly-published packages before they reach your machine.**
 
 One command configures a release-age cooldown across every supported package manager on your machine. Malicious versions of hijacked packages are typically [detected and pulled within hours to a few days](https://socket.dev/blog/npm-introduces-minimumreleaseage-and-bulk-oidc-configuration) — a 4-day hold sits comfortably outside that window.
 
 ```bash
-npm install -g pkg-quarantine
+npm install -g @happyberg/pkg-quarantine
 quarantine init
 ```
 
@@ -123,7 +123,7 @@ AI agents install dependencies automatically, often without a human reviewing th
 
 ```bash
 # Install and configure everything:
-npm install -g pkg-quarantine
+npm install -g @happyberg/pkg-quarantine
 quarantine init
 ```
 
@@ -165,7 +165,7 @@ Add quarantine verification to your CI setup step:
 ```yaml
 - name: Verify quarantine policy
   run: |
-    npm install -g pkg-quarantine
+    npm install -g @happyberg/pkg-quarantine
     quarantine audit --exit-code   # exits 1 if any manager is misconfigured
 ```
 
