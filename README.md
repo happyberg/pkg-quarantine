@@ -21,16 +21,45 @@ That's it. For managers with native release-age support (npm, pnpm, bun, uv, yar
 
 ## Why this exists
 
-The [axios supply-chain compromise](https://www.elastic.co/security-labs/axios-one-rat-to-rule-them-all) (March 31, 2026) injected a cross-platform RAT through a hijacked maintainer account. `axios@1.14.1` shipped at 00:21 UTC; Elastic Security Labs filed an advisory at 01:50 UTC. In the ~90 minutes between publish and disclosure — and the longer window before npm pulled the package — both the `latest` and `legacy` dist-tags pointed at compromised versions, so the majority of fresh installs picked up a backdoored release.
+Supply-chain attacks are arriving in waves, the defenses we built for them are being defeated one by one, and a release-age cooldown is the layer that still holds.
 
-This pattern keeps repeating:
-- Maintainer account compromise → malicious version published
-- Typosquatting → `cros-env` instead of `cross-env`
-- Dependency confusion → private package names published to public registries
+### The May 2026 wave
 
-**The exploit window is short.** Security teams and automated scanners ([Snyk](https://snyk.io/blog/axios-npm-package-compromised-supply-chain-attack-delivers-cross-platform/), [StepSecurity](https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan), [Socket](https://socket.dev/blog/npm-introduces-minimumreleaseage-and-bulk-oidc-configuration)) typically detect and pull malicious packages within hours to a few days of publication. A 4-day quarantine puts your machine outside that window for the bulk of supply-chain attacks.
+On May 11, 2026 between 19:20 and 19:26 UTC, [84 malicious npm artifacts across 42 `@tanstack` packages](https://www.aikido.dev/blog/mini-shai-hulud-is-back-tanstack-compromised) were published. Within 48 hours the same campaign covered 172 packages across npm and PyPI ([Wiz](https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised), [Snyk](https://snyk.io/blog/tanstack-npm-packages-compromised/), [Socket](https://socket.dev/blog/tanstack-npm-packages-compromised-mini-shai-hulud-supply-chain-attack), [Endor Labs](https://www.endorlabs.com/learn/shai-hulud-compromises-the-tanstack-ecosystem-80-packages-compromised)). `@tanstack/react-router` alone has ~12M weekly downloads.
 
-Most package managers have some form of quarantine support — it's just scattered across different formats and options. `pkg-quarantine` configures all of them at once.
+The detail that matters: the malicious versions were signed. Attackers chained a `pull_request_target` Pwn Request, GitHub Actions cache poisoning, and OIDC token extraction from runner process memory to publish through TanStack's legitimate trusted-publishing pipeline. Sigstore verified the artifacts. Provenance attestation showed them as authentic. They were indistinguishable from legitimate by every signature check the ecosystem built for this case.
+
+This is wave 4 of the Shai-Hulud campaign:
+
+- **Sept 15, 2025**: [Shai-Hulud (original)](https://unit42.paloaltonetworks.com/npm-supply-chain-attack/), self-replicating worm, hundreds of packages.
+- **Nov 2025**: [Shai-Hulud 2.0](https://www.microsoft.com/en-us/security/blog/2025/12/09/shai-hulud-2-0-guidance-for-detecting-investigating-and-defending-against-the-supply-chain-attack/), 25,000+ malicious GitHub repos, Zapier / PostHog / Postman hit.
+- **March 2026**: Trivy scanner npm packages, attributed to TeamPCP.
+- **March 31, 2026**: [axios](https://www.elastic.co/security-labs/axios-one-rat-to-rule-them-all) (attributed to UNC1069), `plain-crypto-js` trojan, ~100M weekly downloads.
+- **April 1-8, 2026**: Asurion impersonation campaign (`sbxapps`, `asurion-hub-web`, `soluto-home-web`, `asurion-core`), multi-stage credential harvester.
+- **April 21, 2026**: [pgserve worm](https://www.theregister.com/2026/04/22/another_npm_supply_chain_attack/), cross-registry npm + PyPI, self-propagating.
+- **April 22, 2026**: [`@bitwarden/cli`](https://thehackernews.com/2026/04/bitwarden-cli-compromised-in-ongoing.html) malicious for 93 minutes, attributed to TeamPCP.
+- **May 11-13, 2026**: TanStack / Mini Shai-Hulud wave 4, 172 packages, **signed by the legitimate pipeline**.
+
+### What still works
+
+Detection time. Socket flagged the TanStack artifacts within 6 minutes of publication. By the time anyone ran a fresh install long enough for the malicious versions to enter a dependency tree the second time, the security community had already pulled them.
+
+A 4-day release-age cooldown closes the rest of the gap. Fresh installs of a brand-new version are held back until detection has caught up. It is the only defense in the list above that the May 2026 wave did not subvert.
+
+The native settings exist:
+
+| Manager | Setting |
+|---------|---------|
+| npm 11.10+ | `min-release-age` |
+| pnpm | `minimum-release-age` |
+| bun | `install.minimumReleaseAge` |
+| uv | `exclude-newer` |
+| yarn (per project) | `npmMinimalAgeGate` |
+| deno (per project) | `minimumDependencyAge` |
+
+They live in six config files with six different keys and six different units. `pip`, `gem`, `composer`, `cargo`, and `hex` still have no native install-time gate. And `npm < 11.10` silently accepts `min-release-age` while ignoring it. Green config, zero protection.
+
+`pkg-quarantine` configures all of them at once and verifies they are actually in effect.
 
 ---
 

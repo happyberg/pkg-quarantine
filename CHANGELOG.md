@@ -6,6 +6,30 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.1.5] — 2026-05-13
+
+### Changed
+
+- **README rewritten around the May 2026 supply-chain wave.** The previous
+  README led with the March 31, 2026 axios compromise as the motivating
+  incident. After the May 11 TanStack / Mini Shai-Hulud wave 4 attack
+  (in which 172 malicious npm + PyPI artifacts were signed by TanStack's
+  legitimate OIDC pipeline, Sigstore-verified and provenance-attested,
+  indistinguishable from legitimate by every signature check), the
+  framing now leads with the cadence of named incidents from Sept 2025
+  through May 2026 and the observation that a release-age cooldown is
+  the only listed defense the May wave did not subvert. axios stays in
+  the cadence list. No behavior changes in this release; the tool's
+  feature set is unchanged.
+
+### Security (dev dependencies)
+
+- `postcss` bumped to 8.5.14 (was 8.5.8) to clear
+  [GHSA-qx2v-qp2m-jg93](https://github.com/advisories/GHSA-qx2v-qp2m-jg93)
+  (moderate XSS in CSS stringify output). `postcss` is an indirect
+  dev-only transitive; it is not shipped to users (`files: ["dist"]`).
+  `npm audit` now reports 0 vulnerabilities.
+
 ## [0.1.4] — 2026-04-23
 
 ### Fixed
@@ -115,7 +139,8 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.1...v0.1.2
