@@ -45,12 +45,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dgilperez/pkg-quarantine.git"
+    "url": "git+https://github.com/happyberg/pkg-quarantine.git"
   },
   "bugs": {
-    "url": "https://github.com/dgilperez/pkg-quarantine/issues"
+    "url": "https://github.com/happyberg/pkg-quarantine/issues"
   },
-  "homepage": "https://github.com/dgilperez/pkg-quarantine#readme",
+  "homepage": "https://happyberg.com/blog/tanstack-mini-shai-hulud/",
   "engines": {
     "node": ">=18.0.0"
   },
