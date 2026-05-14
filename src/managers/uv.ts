@@ -1,4 +1,4 @@
-import TOML from '@iarna/toml';
+import { parse as tomlParse, stringify as tomlStringify } from 'smol-toml';
 import { ManagerHandler } from './base.js';
 import { paths } from '../lib/platform.js';
 import type { DesiredSetting, AuditCheck, OutdatedPackage } from '../types.js';
@@ -27,7 +27,7 @@ export class UvHandler extends ManagerHandler {
     let parsed: Record<string, unknown> = {};
     if (existing) {
       try {
-        parsed = TOML.parse(existing) as Record<string, unknown>;
+        parsed = tomlParse(existing) as Record<string, unknown>;
       } catch { /* start fresh */ }
     }
 
@@ -37,7 +37,7 @@ export class UvHandler extends ManagerHandler {
     // Set the correct setting
     parsed['exclude-newer'] = `${this.quarantineDays} days`;
 
-    const merged = TOML.stringify(parsed as TOML.JsonMap);
+    const merged = tomlStringify(parsed);
     const changed = merged !== existing;
 
     if (!dryRun && changed) {
@@ -61,7 +61,7 @@ export class UvHandler extends ManagerHandler {
     }
 
     try {
-      const parsed = TOML.parse(content) as Record<string, unknown>;
+      const parsed = tomlParse(content) as Record<string, unknown>;
       const checks: AuditCheck[] = [];
 
       // Check for incorrect setting

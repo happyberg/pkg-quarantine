@@ -6,6 +6,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-05-14
+
+### Changed
+
+- **Replaced `@iarna/toml` (2.2.5, last published July 2023) with
+  `smol-toml` (1.6.1, last published March 2026).** `smol-toml` is
+  TOML 1.0 compliant, dual-publishes ESM + CJS, has ~17M weekly
+  downloads, and is actively maintained. Drop-in replacement for our
+  parse + stringify usage in `src/config/global-config.ts`,
+  `src/managers/uv.ts`, and `src/managers/bun.ts`. Same runtime dep
+  count (2: commander + smol-toml), zero transitive runtime deps.
+  All 154 tests pass with the swap.
+
 ## [0.2.1] — 2026-05-14
 
 ### Fixed
@@ -191,7 +204,8 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.5...v0.1.6

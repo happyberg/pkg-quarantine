@@ -1,6 +1,6 @@
 {
   "name": "@happyberg/pkg-quarantine",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "commander": "13.1.0",
-    "@iarna/toml": "2.2.5"
+    "smol-toml": "1.6.1"
   },
   "devDependencies": {
     "@types/node": "22.15.3",

@@ -1,4 +1,4 @@
-import TOML from '@iarna/toml';
+import { parse as tomlParse, stringify as tomlStringify } from 'smol-toml';
 import { ManagerHandler } from './base.js';
 import { paths } from '../lib/platform.js';
 import type { DesiredSetting, AuditCheck, OutdatedPackage } from '../types.js';
@@ -33,7 +33,7 @@ export class BunHandler extends ManagerHandler {
     let parsed: Record<string, unknown> = {};
     if (existing) {
       try {
-        parsed = TOML.parse(existing) as Record<string, unknown>;
+        parsed = tomlParse(existing) as Record<string, unknown>;
       } catch { /* start fresh */ }
     }
 
@@ -42,7 +42,7 @@ export class BunHandler extends ManagerHandler {
     install['frozenLockfile'] = true;
     parsed['install'] = install;
 
-    const merged = TOML.stringify(parsed as TOML.JsonMap);
+    const merged = tomlStringify(parsed);
     const changed = merged !== existing;
 
     if (!dryRun && changed) {
@@ -66,7 +66,7 @@ export class BunHandler extends ManagerHandler {
     }
 
     try {
-      const parsed = TOML.parse(content) as Record<string, unknown>;
+      const parsed = tomlParse(content) as Record<string, unknown>;
       const install = (parsed['install'] ?? {}) as Record<string, unknown>;
 
       return [

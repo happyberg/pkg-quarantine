@@ -1,4 +1,4 @@
-import TOML from '@iarna/toml';
+import { parse as tomlParse } from 'smol-toml';
 import type { QuarantineConfig, ManagerName } from '../types.js';
 import { DEFAULT_CONFIG } from '../types.js';
 
@@ -7,7 +7,7 @@ export function parseQuarantineConfig(content: string | null): QuarantineConfig 
   if (!content?.trim()) return { ...DEFAULT_CONFIG };
 
   try {
-    const parsed = TOML.parse(content);
+    const parsed = tomlParse(content) as Record<string, unknown>;
     return {
       quarantine_days:
         typeof parsed['quarantine_days'] === 'number'
