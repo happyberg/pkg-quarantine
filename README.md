@@ -61,6 +61,8 @@ They live in six config files with six different keys and six different units. `
 
 `pkg-quarantine` configures all of them at once and verifies they are actually in effect.
 
+> **Deep dive**: [TanStack and the day provenance attestation stopped being a defense](https://happyberg.com/blog/tanstack-mini-shai-hulud/) — full breakdown of the May 11 attack chain, the defenses that failed, and the cooldown that held.
+
 ---
 
 ## Commands
@@ -228,7 +230,7 @@ Defaults apply if the file doesn't exist: 4-day hold, all managers (yarn and den
 
 ## Design
 
-- **2 runtime dependencies**: `commander` + `@iarna/toml`. Zero transitive deps.
+- **2 runtime dependencies**: `commander` + `smol-toml`. Zero transitive deps.
 - **Dependency injection**: All commands receive `FileSystem` and `Shell` interfaces. Tests use in-memory mocks — no disk or network in tests.
 - **Auth-token safe**: The custom `.npmrc` parser treats `//` lines as scoped registry entries (not comments), preserving all auth tokens intact.
 - **Native `fetch()`**: Registry API calls use Node's built-in fetch. No HTTP library dependency.

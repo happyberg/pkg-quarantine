@@ -6,6 +6,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.3] — 2026-05-14
+
+### Changed
+
+- **README**: Design section now mentions `smol-toml` instead of the
+  stale `@iarna/toml` reference (the swap happened in 0.2.2; the
+  README missed the rewrite). Also added a deep-dive pointer to the
+  https://happyberg.com/blog/tanstack-mini-shai-hulud/ writeup so
+  readers can land on the full attack chain analysis from npmjs.com.
+
+No code changes.
+
 ## [0.2.2] — 2026-05-14
 
 ### Changed
@@ -204,7 +216,8 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...v0.2.0
