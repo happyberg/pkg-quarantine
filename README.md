@@ -8,14 +8,17 @@
 
 **Block freshly-published packages before they reach your machine.**
 
-One command configures a release-age cooldown across every supported package manager on your machine. Malicious versions of hijacked packages are typically [detected and pulled within hours to a few days](https://socket.dev/blog/npm-introduces-minimumreleaseage-and-bulk-oidc-configuration) — a 4-day hold sits comfortably outside that window.
+One command configures a release-age cooldown across every supported package manager on your machine. Malicious versions of hijacked packages are typically [detected and pulled within hours to a few days](https://socket.dev/blog/npm-introduces-minimumreleaseage-and-bulk-oidc-configuration), so a 4-day hold sits comfortably outside that window.
 
 ```bash
 npm install -g @happyberg/pkg-quarantine
 quarantine init
+quarantine --version   # 0.2.4
 ```
 
 That's it. For managers with native release-age support (npm, pnpm, bun, uv, yarn, deno), every install now silently rejects anything published in the last 4 days. For managers without it (pip, gem, composer, cargo, hex), `quarantine update` enforces the same policy at update time.
+
+> **Deep dive**: [TanStack and the day provenance attestation stopped being a defense](https://happyberg.com/blog/tanstack-mini-shai-hulud/). Full breakdown of the May 11, 2026 attack chain, the defenses that failed, and the cooldown that held.
 
 ---
 
@@ -44,7 +47,7 @@ This is wave 4 of the Shai-Hulud campaign:
 
 Detection time. Socket flagged the TanStack artifacts within 6 minutes of publication. By the time anyone ran a fresh install long enough for the malicious versions to enter a dependency tree the second time, the security community had already pulled them.
 
-A 4-day release-age cooldown closes the rest of the gap. Fresh installs of a brand-new version are held back until detection has caught up. It is the only defense in the list above that the May 2026 wave did not subvert.
+A 4-day release-age cooldown closes the rest of the gap. Fresh installs of a brand-new version are held back until detection has caught up. It is one defense the May 2026 wave did not subvert, because it does not depend on trusting any party, signature, or attestation. It just waits.
 
 The native settings exist:
 
@@ -61,8 +64,6 @@ They live in six config files with six different keys and six different units. `
 
 `pkg-quarantine` configures all of them at once and verifies they are actually in effect.
 
-> **Deep dive**: [TanStack and the day provenance attestation stopped being a defense](https://happyberg.com/blog/tanstack-mini-shai-hulud/) — full breakdown of the May 11 attack chain, the defenses that failed, and the cooldown that held.
-
 ---
 
 ## Commands
@@ -76,7 +77,7 @@ quarantine update [managers...]      # Quarantine-aware global updater
 
 ### `quarantine init`
 
-Writes quarantine settings to each manager's global config file. Existing settings and auth tokens are preserved — it merges, never clobbers.
+Writes quarantine settings to each manager's global config file. Existing settings and auth tokens are preserved; it merges, never clobbers.
 
 ```bash
 quarantine init                  # All detected managers
@@ -115,11 +116,11 @@ quarantine update --force            # Bypass quarantine (prints a warning)
 
 ## For AI agents
 
-**If you use Claude Code, Codex, Cursor, or any AI coding assistant that can install packages — this is especially for you.**
+**If you use Claude Code, Codex, Cursor, or any AI coding assistant that can install packages, this is especially for you.**
 
 AI agents install dependencies automatically, often without a human reviewing the exact version or publish date. That's fine for productivity. It's a supply-chain risk if the agent happens to install a freshly-hijacked package.
 
-`quarantine init` enforces the policy at the package manager level, so it applies to *every* install — whether a human typed it or an agent did.
+`quarantine init` enforces the policy at the package manager level, so it applies to *every* install, whether a human typed it or an agent did.
 
 ### Setting it up once
 
@@ -177,22 +178,22 @@ Add quarantine verification to your CI setup step:
 
 `pkg-quarantine` covers 13 package managers, but they fall into three honest tiers depending on what the underlying tool supports.
 
-### Tier 1 — Native install-time quarantine
+### Tier 1: Native install-time quarantine
 
 These managers ship a built-in release-age gate. `init` writes the setting and *every* install (manual or via an AI agent) is automatically protected.
 
 | Manager | Mechanism | Notes |
 |---------|-----------|-------|
-| **npm** | `min-release-age` in `~/.npmrc` | **Requires npm ≥ 11.10.0** (Feb 2026). Earlier versions silently ignore the setting — `quarantine audit` warns. |
+| **npm** | `min-release-age` in `~/.npmrc` | **Requires npm ≥ 11.10.0** (Feb 2026). Earlier versions silently ignore the setting; `quarantine audit` warns. |
 | **pnpm** | `minimum-release-age` (minutes) in pnpm rc | Config lives at `~/Library/Preferences/pnpm/rc` on macOS, `~/.config/pnpm/rc` on Linux (or `$XDG_CONFIG_HOME/pnpm/rc`). |
 | **bun** | `install.minimumReleaseAge` (seconds) in `bunfig.toml` | — |
 | **uv** | `exclude-newer = "N days"` in `uv.toml` | — |
-| **yarn** | `npmMinimalAgeGate` in `.yarnrc.yml` | Per-project only — `init` prints the snippet to add. |
-| **deno** | `minimumDependencyAge` in `deno.json` | Per-project only — `init` prints the snippet to add. |
+| **yarn** | `npmMinimalAgeGate` in `.yarnrc.yml` | Per-project only. `init` prints the snippet to add. |
+| **deno** | `minimumDependencyAge` in `deno.json` | Per-project only. `init` prints the snippet to add. |
 
-### Tier 2 — Update-time quarantine via `quarantine update`
+### Tier 2: Update-time quarantine via `quarantine update`
 
-These managers have no native release-age config, so install-time enforcement isn't possible. `quarantine update` checks the registry API before upgrading and refuses fresh versions. Bare `pip install foo` / `gem install foo` / etc. are *not* gated — you must use `quarantine update`.
+These managers have no native release-age config, so install-time enforcement isn't possible. `quarantine update` checks the registry API before upgrading and refuses fresh versions. Bare `pip install foo` / `gem install foo` / etc. are *not* gated; you must use `quarantine update`.
 
 | Manager | Registry checked | Hardening `init` configures |
 |---------|------------------|------------------------------|
@@ -204,7 +205,7 @@ These managers have no native release-age config, so install-time enforcement is
 
 > Composer 2.9+ already enables `audit.block-insecure` by default, so `init` no longer writes that setting.
 
-### Tier 3 — Audit and recommendation only
+### Tier 3: Audit and recommendation only
 
 These managers don't have a release-age model at all. `init` prints best-practice recommendations and `audit` reports posture; there is no enforcement.
 
@@ -224,14 +225,23 @@ quarantine_days = 4
 managers = ["npm", "pnpm", "bun", "uv", "pip", "gem", "composer", "go", "brew", "cargo", "hex"]
 ```
 
-Defaults apply if the file doesn't exist: 4-day hold, all managers (yarn and deno are per-project only).
+Defaults apply if the file doesn't exist: 4-day hold, all managers.
+
+The default `managers` array lists 11 entries because `yarn` and `deno` are gated per-project (their release-age settings live in `.yarnrc.yml` and `deno.json`, not a global rc). `pkg-quarantine` still counts them in its "13 supported managers" headline, but `quarantine init` for those prints the snippet you add to the project, instead of writing global config.
+
+---
+
+## Security and contributing
+
+- Security issues: please follow the disclosure process in [SECURITY.md](SECURITY.md).
+- Contributions welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
 
 ---
 
 ## Design
 
 - **2 runtime dependencies**: `commander` + `smol-toml`. Zero transitive deps.
-- **Dependency injection**: All commands receive `FileSystem` and `Shell` interfaces. Tests use in-memory mocks — no disk or network in tests.
+- **Dependency injection**: All commands receive `FileSystem` and `Shell` interfaces. Tests use in-memory mocks; no disk or network in tests.
 - **Auth-token safe**: The custom `.npmrc` parser treats `//` lines as scoped registry entries (not comments), preserving all auth tokens intact.
 - **Native `fetch()`**: Registry API calls use Node's built-in fetch. No HTTP library dependency.
 - **Merge, never clobber**: `init` reads existing config before writing, preserving all unrelated settings.
@@ -251,4 +261,4 @@ npm run test:watch    # Watch mode
 
 ## License
 
-MIT
+[MIT](LICENSE).

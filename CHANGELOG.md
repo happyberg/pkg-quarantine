@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.4] — 2026-05-14
+
+### Changed
+
+- README: removed em-dashes from prose, moved the deep-dive blog
+  pointer right under the install snippet so it lands above the fold
+  on npmjs.com, added `quarantine --version` to the install example,
+  linked the LICENSE file, and added pointers to SECURITY.md and
+  CONTRIBUTING.md. Dropped the "only defense" framing in favor of
+  "one defense that did not get subverted" — accurate without
+  overstating.
+- README "Configuration" section: explicit note that `yarn` and `deno`
+  ship per-project so the default `managers` array lists 11; the
+  header still claims 13 supported because per-project enforcement is
+  real, just gated differently.
+- CHANGELOG: softened a few past entries (the `smol-toml` swap,
+  the `--version` fix, the May-2026-wave framing) to remove
+  marketing-flavored claims I could not verify byte-for-byte. The
+  reality stands without them.
+
+No code changes.
+
 ## [0.2.3] — 2026-05-14
 
 ### Changed
@@ -22,25 +44,24 @@ No code changes.
 
 ### Changed
 
-- **Replaced `@iarna/toml` (2.2.5, last published July 2023) with
-  `smol-toml` (1.6.1, last published March 2026).** `smol-toml` is
-  TOML 1.0 compliant, dual-publishes ESM + CJS, has ~17M weekly
-  downloads, and is actively maintained. Drop-in replacement for our
-  parse + stringify usage in `src/config/global-config.ts`,
-  `src/managers/uv.ts`, and `src/managers/bun.ts`. Same runtime dep
-  count (2: commander + smol-toml), zero transitive runtime deps.
-  All 154 tests pass with the swap.
+- Replaced `@iarna/toml@2.2.5` (last published July 2023) with
+  `smol-toml@1.6.1` (last published March 2026). `smol-toml`
+  dual-publishes ESM + CJS, has a more recent maintenance cadence,
+  and parses + stringifies the configs we touch (`global-config.ts`,
+  `uv.ts`, `bun.ts`) without behavior changes in our test suite.
+  Same runtime dep count (`commander` + `smol-toml`), zero transitive
+  runtime deps. 154/154 tests pass after the swap.
 
 ## [0.2.1] — 2026-05-14
 
 ### Fixed
 
-- **`quarantine --version` now reports the correct release version.**
-  The version string was previously hardcoded as `'0.1.3'` in
-  `src/index.ts` and never bumped through the 0.1.4/0.1.5/0.1.6/0.2.0
-  cycle. Now injected at build time by `tsup` from `package.json` via
-  a `__PKG_VERSION__` define, so future bumps to `package.json`
-  automatically flow through to the CLI without a manual edit.
+- `quarantine --version` now reports the actual release version. The
+  string was hardcoded as `'0.1.3'` in `src/index.ts` and was not
+  bumped through the 0.1.4 / 0.1.5 / 0.1.6 / 0.2.0 cycle. It is now
+  injected at build time by `tsup` from `package.json` via a
+  `__PKG_VERSION__` define, so future version bumps flow through to
+  the CLI automatically.
 
 ## [0.2.0] — 2026-05-14
 
@@ -95,8 +116,8 @@ on GitHub but was not published to npm; npm jumps from 0.1.4 to 0.1.6.
   indistinguishable from legitimate by every signature check), the
   framing now leads with the cadence of named incidents from Sept 2025
   through May 2026 and the observation that a release-age cooldown is
-  the only listed defense the May wave did not subvert. axios stays in
-  the cadence list. No behavior changes in this release; the tool's
+  one defense that the May wave did not subvert. axios stays in the
+  cadence list. No behavior changes in this release; the tool's
   feature set is unchanged.
 
 ### Security (dev dependencies)
@@ -216,15 +237,16 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.4...v0.1.5
-[0.1.4]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.3...v0.1.4
-[0.1.3]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.2...v0.1.3
-[0.1.2]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.1...v0.1.2
-[0.1.1]: https://github.com/dgilperez/pkg-quarantine/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/dgilperez/pkg-quarantine/releases/tag/v0.1.0
+[0.1.4]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.3...v0.1.4
+[0.1.3]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.2...v0.1.3
+[0.1.2]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/happyberg/pkg-quarantine/releases/tag/v0.1.0
