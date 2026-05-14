@@ -10,6 +10,12 @@ import { updateCommand } from './commands/update.js';
 import { ALL_MANAGERS } from './types.js';
 import type { ManagerName } from './types.js';
 
+// Injected at build time by tsup (see tsup.config.ts).
+// Falls back to 'unknown' when running outside the bundled build (e.g. tests).
+declare const __PKG_VERSION__: string;
+const PKG_VERSION: string =
+  typeof __PKG_VERSION__ !== 'undefined' ? __PKG_VERSION__ : 'unknown';
+
 const fs = new RealFileSystem();
 const shell = new RealShell();
 
@@ -36,7 +42,7 @@ const program = new Command();
 program
   .name('quarantine')
   .description('Unified quarantine policy for package managers')
-  .version('0.1.3');
+  .version(PKG_VERSION);
 
 program
   .command('init')

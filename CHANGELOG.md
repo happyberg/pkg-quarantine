@@ -6,6 +6,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-05-14
+
+### Fixed
+
+- **`quarantine --version` now reports the correct release version.**
+  The version string was previously hardcoded as `'0.1.3'` in
+  `src/index.ts` and never bumped through the 0.1.4/0.1.5/0.1.6/0.2.0
+  cycle. Now injected at build time by `tsup` from `package.json` via
+  a `__PKG_VERSION__` define, so future bumps to `package.json`
+  automatically flow through to the CLI without a manual edit.
+
 ## [0.2.0] — 2026-05-14
 
 ### Changed
@@ -180,7 +191,8 @@ If you ran `quarantine init` on macOS with 0.1.3 or earlier:
 - Native `fetch()` for registry API calls — no HTTP library dependency.
 - 130+ tests across 27 test files.
 
-[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/happyberg/pkg-quarantine/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/happyberg/pkg-quarantine/compare/v0.1.4...v0.1.5
